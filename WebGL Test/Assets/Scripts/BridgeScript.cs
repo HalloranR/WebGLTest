@@ -33,7 +33,7 @@ public class BridgeScript : MonoBehaviour
 
     public void ReceiveNumberFromPage(int num)
     {
-        int _num = num * num;
+        int _num = num;
 
         WebGLPluginJS.DisplayNum(_num);
     }

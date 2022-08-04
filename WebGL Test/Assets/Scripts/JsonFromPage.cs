@@ -21,9 +21,9 @@ public class JsonFromPage : MonoBehaviour
 
         //SceneConfig myJson = JsonConvert.DeserializeObject<SceneConfig>(json);
         SceneConfig myJson = JsonUtility.FromJson<SceneConfig>(json);
-        WebGLPluginJS.DisplayStr("What arrives in Unity: " + json + " | " + json2);
-        WebGLPluginJS.DisplayStr("Name in Unity "+ myJson.name);
-        WebGLPluginJS.DisplayNum(myJson.value);
+        //WebGLPluginJS.DisplayStr("What arrives in Unity: " + json + " | " + json2);
+        //WebGLPluginJS.DisplayStr("Name in Unity "+ myJson.name);
+        //WebGLPluginJS.DisplayNum(myJson.value);
         //
         textbox1.text = myJson.name;
         textbox2.text = myJson.value.ToString();

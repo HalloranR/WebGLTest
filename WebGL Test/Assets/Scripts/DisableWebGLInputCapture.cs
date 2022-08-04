@@ -12,7 +12,7 @@ public class DisableWebGLInputCapture : MonoBehaviour
 
     void Start()
     {
-        WebGLInput.captureAllKeyboardInput = false;
+        WebGLInput.captureAllKeyboardInput = true;
         toggle.onValueChanged.AddListener((value) => { WebGLInput.captureAllKeyboardInput = value; });
     }
 
