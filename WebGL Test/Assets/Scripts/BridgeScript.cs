@@ -40,13 +40,14 @@ public class BridgeScript : MonoBehaviour
 
     public void RecieveJsonFromPage(string json)
     {
+        //Debug.Log(json);
+        print(json);
         jsonInfo.testJson(json);
     }
 
     private void Start()
     {
-        WebGLPluginJS.CallFunction();
-        SendMessageToPage("Please");
+        //WebGLPluginJS.CallFunction();
     }
 }
 

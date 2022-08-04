@@ -1,30 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// Disable capturing whole input on the page
 /// Read more: https://docs.unity3d.com/ScriptReference/WebGLInput-captureAllKeyboardInput.html
 /// </summary>
 public class DisableWebGLInputCapture : MonoBehaviour
 {
+    [SerializeField] private Toggle toggle ;
+
     void Start()
     {
-#if UNITY_WEBGL && !UNITY_EDITOR
         WebGLInput.captureAllKeyboardInput = false;
-#endif
+        toggle.onValueChanged.AddListener((value) => { WebGLInput.captureAllKeyboardInput = value; });
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Print to console");
-            WebGLInput.captureAllKeyboardInput = true;
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Debug.Log("Print to console");
-            WebGLInput.captureAllKeyboardInput = false;
-        }
-    }
 }
