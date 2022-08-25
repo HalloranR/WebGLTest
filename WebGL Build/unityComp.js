@@ -1,81 +1,63 @@
-<!DOCTYPE html>
-<html lang="en-us">
+//custom class
+var myGameInstance = null;
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Unity WebGL Player | WebGL Test</title>
-  <link rel="shortcut icon" href="TemplateData/favicon.ico">
-  <link rel="stylesheet" href="TemplateData/style.css">
-</head>
+class UnityComp extends HTMLElement {
+  constructor() {
+    super();
+    this.innerHTML = this.template;
+  }
 
-<body>
-  <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas" width=960 height=600></canvas>
-    <div id="unity-loading-bar">
-      <div id="unity-logo"></div>
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full"></div>
+  get template() {
+    return `
+      <div id="unity-container" class="unity-desktop">
+        <canvas id="unity-canvas" width=960 height=600></canvas>
+        <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+        </div>
+        </div>
+          <div id="unity-warning"> </div>
+          <div id="unity-footer">
+          <div id="unity-webgl-logo"></div>
+          <div id="unity-fullscreen-button"></div>
+          <div id="unity-build-title">WebGL Test</div>
+        </div>
       </div>
-    </div>
-    <div id="unity-warning"> </div>
-    <div id="unity-footer">
-      <div id="unity-webgl-logo"></div>
-      <div id="unity-fullscreen-button"></div>
-      <div id="unity-build-title">WebGL Test</div>
-    </div>
-  </div>
+    `;
+  }
 
-  <!--Custom page elements-->
-  <div class="centered">
-    <h2>Message from Unity</h2>
-    <p id="lblMessage">...</p>
-  </div>
+  //This needs to be attached to the script on the page
+  get script(){
+    return `
+    <script>
+      function receiveMessageFromUnity(txt) {
+        // Get element to assign the message
+        const lblMessage = document.getElementById("lblMessage");
 
-  <div class="message-form centered">
-    <h2>Message for Unity</h2>
-    <input type="text" name="txtMessage" id="txtMessage" placeholder="Enter message..." />
-    <button onclick="sendMessageToUnity()">Send</button>
-  </div>
+        // Assign received from Unity message
+        lblMessage.innerText = txt;
+      }    
+    </script>
+    `
+  }
 
+  connectedCallback() {
+    const root = this;
+    const container = root.querySelector("#unity-container");
+    const canvas = root.querySelector("#unity-canvas");
+    const loadingBar = root.querySelector("#unity-loading-bar");
+    const progressBarFull = root.querySelector("#unity-progress-bar-full");
+    const fullscreenButton = root.querySelector("#unity-fullscreen-button");
+    const warningBanner = root.querySelector("#unity-warning");
 
-  <div class="message-form centered">
-    <h2>Number for Unity</h2>
-    <input type="text" name="numMessage" id="numMessage" placeholder="Enter numeric..." />
-    <button onclick="sendNumberToUnity()">Send</button>
-  </div>
+    console.log("1", container);
 
-
-  <div class="message-form centered">
-    <h2>Json for Unity</h2>
-    <input type="text" name="jsonMessage1" id="jsonMessage1" placeholder="Enter name..." />
-    <input type="text" name="jsonMessage2" id="jsonMessage2" placeholder="Enter age..." />
-    <button onclick="sendJsonToUnity()">Send</button>
-  </div>
-
-
-
-
-
-  <script>
-    var container = document.querySelector("#unity-container");
-    var canvas = document.querySelector("#unity-canvas");
-    var loadingBar = document.querySelector("#unity-loading-bar");
-    var progressBarFull = document.querySelector("#unity-progress-bar-full");
-    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-    var warningBanner = document.querySelector("#unity-warning");
-
-    // Shows a temporary message banner/ribbon for a few seconds, or
-    // a permanent error message on top of the canvas if type=='error'.
-    // If type=='warning', a yellow highlight color is used.
-    // Modify or remove this function to customize the visually presented
-    // way that non-critical warnings and error messages are presented to the
-    // user.
     function unityShowBanner(msg, type) {
       function updateBannerVisibility() {
         warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
       }
-      var div = document.createElement('div');
+      var div = root.createElement('div');
       div.innerHTML = msg;
       warningBanner.appendChild(div);
       if (type == 'error') div.style = 'background: red; padding: 10px;';
@@ -88,6 +70,8 @@
       }
       updateBannerVisibility();
     }
+
+    console.log("2");
 
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/WebGL Build.loader.js";
@@ -137,7 +121,6 @@
 
     var script = document.createElement("script");
     script.src = loaderUrl;
-    var myGameInstance = null;
     script.onload = () => {
       createUnityInstance(canvas, config, (progress) => {
         progressBarFull.style.width = 100 * progress + "%";
@@ -151,40 +134,11 @@
         alert(message);
       });
     };
-    document.body.appendChild(script);
+    root.appendChild(script);
+  }
 
-    var script = document.createElement("script");
-    script.src = loaderUrl;
-    var myGameInstance2 = null;
-    script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        progressBarFull.style.width = 100 * progress + "%";
-      }).then((unityInstance) => {
-        myGameInstance2 = unityInstance;
-        loadingBar.style.display = "none";
-        fullscreenButton.onclick = () => {
-          unityInstance.SetFullscreen(1);
-        };
-      }).catch((message) => {
-        alert(message);
-      });
-    };
-    document.body.appendChild(script);
-
-
-
-
-    //Scripts to unity
-    // Function which receives a message from Unity
-    function receiveMessageFromUnity(txt) {
-      // Get element to assign the message
-      const lblMessage = document.getElementById("lblMessage");
-
-      // Assign received from Unity message
-      lblMessage.innerText = txt;
-    }
-
-    function sendMessageToUnity() {
+  listen1(el) {
+    el.addEventListener('click', function (){
       // Get the input field
       const txtMessage = document.getElementById("txtMessage");
 
@@ -197,18 +151,22 @@
       // Send message to the Unity scene
       // Params: "Target object in the scene", "Function name", "Parameters"
       myGameInstance.SendMessage("[Bridge]", "ReceiveMessageFromPage", message);
-    }
+    })
+  }
 
-    function sendNumberToUnity() {
+  listen2(el) {
+    el.addEventListener('click', function (){
       const txtMessage = document.getElementById("numMessage");
       const message = txtMessage.value;
       txtMessage.value = "";
 
       // Send message to the Unity scene
       myGameInstance.SendMessage("[Bridge]", "ReceiveNumberFromPage", parseInt(message));
-    }
+    })
+  }
 
-    function sendJsonToUnity() {
+  listen3(el){
+    el.addEventListener('click', function (){
       // Get the first json element
       const txtMessage = document.getElementById("jsonMessage1");
       const message = txtMessage.value;
@@ -228,10 +186,13 @@
 
       // Send message to the Unity scene
       myGameInstance.SendMessage("[Bridge]", "RecieveJsonFromPage", jsonString);
-    }
+    })
+  }
+}
 
+//define the custom element class
+window.customElements.define('unity-comp', UnityComp)
 
-  </script>
-</body>
-
-</html>
+document.querySelector('unity-comp').listen1(document.getElementById('txtMessageBttn'))
+document.querySelector('unity-comp').listen2(document.getElementById('numBttn'))
+document.querySelector('unity-comp').listen3(document.getElementById('jsonBttn'))

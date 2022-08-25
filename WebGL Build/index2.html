@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <title>Unity WebComponent Test</title>
+</head>
+
+<body>
+    <div class="centered">
+        <h2>Message from Unity</h2>
+        <p id="lblMessage">...</p>
+      </div>
+    
+      <div class="message-form centered">
+        <h2>Message for Unity</h2>
+        <input type="text" name="txtMessage" id="txtMessage" placeholder="Enter message..." />
+        <button id="txtMessageBttn">Send</button>
+      </div>
+    
+    
+      <div class="message-form centered">
+        <h2>Number for Unity</h2>
+        <input type="text" name="numMessage" id="numMessage" placeholder="Enter numeric..." />
+        <button id="numBttn">Send</button>
+      </div>
+    
+    
+      <div class="message-form centered">
+        <h2>Json for Unity</h2>
+        <input type="text" name="jsonMessage1" id="jsonMessage1" placeholder="Enter name..." />
+        <input type="text" name="jsonMessage2" id="jsonMessage2" placeholder="Enter age..." />
+        <button id="jsonBttn">Send</button>
+      </div>
+
+    <unity-comp></unity-comp>
+
+    <script src="unityComp.js"></script>
+</body>
+
+</html>
